@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const goals = require('./db.json')
+let globalID = 2
 
 const app = express();
 
@@ -34,7 +36,28 @@ app.get("/api/fortune", (req, res) => {
   let randomFortune = fortunes[randomIndex];
 
   res.status(200).send(randomFortune);
-  
 });
+
+app.post("/api/goals", (req,res) => {
+  let goal = req.body
+  let newGoal = {
+    id: globalID,
+    goal
+  }
+  goals.push(newGoal)
+  res.status(200).send(newGoal)
+  globalID++
+
+})
+app.put("/api/goals/:id", () => {
+
+})
+
+app.delete("/api/goals/:id", () => {
+
+})
+
+
+
 
 app.listen(4000, () => console.log("Server running on 4000"));
