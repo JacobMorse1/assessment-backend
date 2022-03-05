@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const goals = require('./db.json')
-let globalID = 2
 
 const app = express();
 
@@ -9,6 +7,8 @@ const app = express();
 app.use(cors());
 
 app.use(express.json()); // When we want to be able to accept JSON.
+
+const users = []
 
 app.get("/api/compliment", (req, res) => {
   const compliments = ["Gee, you're a smart cookie!",
@@ -38,25 +38,42 @@ app.get("/api/fortune", (req, res) => {
   res.status(200).send(randomFortune);
 });
 
+
 app.post("/api/goals", (req,res) => {
-  let goal = req.body
-  let newGoal = {
-    id: globalID,
-    goal
+  console.log(req.body)
+  console.log(req.params)
+  console.log(req.query)
+
+  const {newGoal} = req.body
+
+  users.push(newGoal)
+  
+  res.status(200).send(users)
+
+})
+
+app.delete(`/api/delete/:id`, (req, res) => {
+  console.log(req.params)  
+
+  if(+req.params.id) {
+    users.splice(req.params.id, 1)
+    res.status(200).send(users)
+  }else{
+    res.status(400).send(`Number doesn't exist`)
   }
-  goals.push(newGoal)
-  res.status(200).send(newGoal)
-  globalID++
-
-})
-app.put("/api/goals/:id", () => {
-
 })
 
-app.delete("/api/goals/:id", () => {
+app.put("/api/edi/:id", (req, res) => {
+  console.log(req.params)
+  console.log(req.body)
 
+  const {goalChange} = req.body
+  const editIndex = +req.params.id
+
+  users[editIndex] = editName
+
+  res.status(200).send(users)
 })
-
 
 
 
